@@ -14,7 +14,7 @@ class httpd (
   class { 'serverspec':
     stage             => 'test',
     component         => 'httpd',
-    staging_directory => "${tmp_dir}/packer-puppet-masterless-httpd",
+#    staging_directory => "${tmp_dir}/packer-puppet-masterless-httpd",
     tries             => 15,
     try_sleep         => 6,
   }

@@ -30,7 +30,7 @@
       "subnet_id": "{{user `aws_subnet_id`}}",
       "security_group_id": "{{user `aws_security_group_id`}}",
       "ami_users": "{{user `ami_users`}}",
-      "source_ami": "{{user `publish_ami_source_ami`}}",
+      "source_ami": "{{user `base_ami_source_ami`}}",
       "run_tags": {
         "Application Id": "Adobe Experience Manager (AEM)",
         "Application Role": "AEM Publish AMI",
@@ -58,7 +58,7 @@
     },
     {
       "type": "file",
-      "source": "conf/hieradata",
+      "source": "conf/",
       "destination": "{{user `tmp_dir`}}"
     },
     {
@@ -72,6 +72,84 @@
       "destination": "{{user `tmp_dir`}}"
     },
     {
+	"type": "shell-local",
+	"command": "echo #################################### base starts ####################"
+    },
+    {
+      "type": "shell",
+      "script": "provisioners/bash/{{user `base_ami_source_ami`}}.sh",
+      "execute_command": "{{ .Vars }} sudo -E bash {{ .Path }}",
+      "environment_vars" : [
+        "PUPPET_BIN_DIR={{user `puppet_bin_dir`}}"
+      ]
+    },
+    {
+      "type": "puppet-masterless",
+      "extra_arguments": [
+      ],
+      "staging_directory": "{{user `tmp_dir`}}/packer-puppet-masterless-{{user `component`}}",
+      "manifest_file": "provisioners/puppet/manifests/base.pp",
+      "hiera_config_path": "conf/hiera.yaml",
+      "module_paths": [
+        "modules",
+        "provisioners/puppet/modules"
+      ],
+      "puppet_bin_dir": "{{user `puppet_bin_dir`}}",
+      "facter": {
+        "staging_directory":  "{{user `tmp_dir`}}/packer-puppet-masterless-{{user `component`}}"
+      }
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "set -o nounset",
+        "set -o errexit",
+        "export PATH=${PATH}:/sbin:/usr/sbin:/usr/local/sbin",
+
+        "cd {{user `tmp_dir`}}/serverspec",
+        "bundle install --path=vendor",
+        "bundle exec rake spec SPEC=spec/base_spec.rb"
+      ],
+      "environment_vars" : [
+        "FACTER_packer_build_name=base",
+        "FACTER_packer_staging_dir={{user `tmp_dir`}}"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline": [
+	"rm -rf {{user `tmp_dir`}}/packer-puppet-masterless-{{user `component`}}" 
+      ]
+    },
+    {
+	"type": "shell-local",
+	"command": "echo #################################### java starts ####################"
+    },
+    {
+      "type": "puppet-masterless",
+      "staging_directory": "{{user `tmp_dir`}}/packer-puppet-masterless-{{user `component`}}",
+      "manifest_file": "provisioners/puppet/manifests/java.pp",
+      "hiera_config_path": "conf/hiera.yaml",
+      "module_paths": [
+        "modules",
+        "provisioners/puppet/modules"
+      ],
+      "puppet_bin_dir": "{{user `puppet_bin_dir`}}",
+      "facter": {
+        "staging_directory":  "{{user `tmp_dir`}}/packer-puppet-masterless-{{user `component`}}"
+      }
+    },
+    {
+      "type": "shell",
+      "inline": [
+	"rm -rf {{user `tmp_dir`}}/packer-puppet-masterless-{{user `component`}}" 
+      ]
+    },
+    {
+	"type": "shell-local",
+	"command": "echo #################################### publisher  starts ####################"
+    },
+    {
       "type": "puppet-masterless",
       "staging_directory": "{{user `tmp_dir`}}/packer-puppet-masterless-aem_base",
       "manifest_file": "provisioners/puppet/manifests/aem_base.pp",
@@ -80,8 +158,11 @@
         "modules",
         "provisioners/puppet/modules"
       ],
-      "puppet_bin_dir": "{{user `puppet_bin_dir`}}"
-    },
+      "puppet_bin_dir": "{{user `puppet_bin_dir`}}",
+      "facter": {
+        "staging_directory":  "{{user `tmp_dir`}}/packer-puppet-masterless-aem_base"
+      }
+    },      
     {
       "type": "puppet-masterless",
       "extra_arguments": "--debug",
@@ -92,7 +173,10 @@
         "modules",
         "provisioners/puppet/modules"
       ],
-      "puppet_bin_dir": "{{user `puppet_bin_dir`}}"
+      "puppet_bin_dir": "{{user `puppet_bin_dir`}}",
+      "facter": {
+        "staging_directory":  "{{user `tmp_dir`}}/packer-puppet-masterless-aem_base"
+      }
     },
     {
       "type": "shell",

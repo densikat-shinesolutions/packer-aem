@@ -1,4 +1,30 @@
 ---
+
+
+# base stuff
+timezone::region: 'Australia'
+timezone::locality: 'Melbourne'
+
+cloudwatchlogs::region: 'ap-southeast-2'
+
+base::packer_user: "%{hiera('packer_user')}"
+base::packer_group: "%{hiera('packer_group')}"
+
+base::aws_agents_install_url: 'https://d1wk0tztpsntt1.cloudfront.net/linux/latest/install'
+
+base::tmp_dir: "%{hiera('tmp_dir')}"
+
+# java stuff
+#
+classes:
+  - 'jdk_oracle'
+jdk_oracle::version: '8'
+jdk_oracle::version_update: '112'
+jdk_oracle::version_build: '15'
+
+java::tmp_dir: "%{hiera('tmp_dir')}"
+
+# publisher stuff
 publish::aem_quickstart_source: "%{hiera('aem_quickstart_source')}"
 publish::aem_license_source: "%{hiera('aem_license_source')}"
 publish::aem_healthcheck_version: "%{hiera('aem_healthcheck_version')}"
@@ -8,3 +34,7 @@ publish::tmp_dir: "%{hiera('tmp_dir')}"
 
 aem_base::aem_healthcheck_version: "%{hiera('aem_healthcheck_version')}"
 aem_base::tmp_dir: "%{hiera('tmp_dir')}"
+
+
+# set server spec staging dir
+serverspec::staging_directory: "%{::staging_directory}"

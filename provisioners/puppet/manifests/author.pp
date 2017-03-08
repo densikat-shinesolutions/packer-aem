@@ -126,7 +126,7 @@ class author (
   class { 'serverspec':
     stage             => 'test',
     component         => 'author',
-    staging_directory => "${tmp_dir}/packer-puppet-masterless-author",
+#    staging_directory => "${tmp_dir}/packer-puppet-masterless-author",
     tries             => 5,
     try_sleep         => 3,
   }
