@@ -121,7 +121,7 @@ class publish (
   class { 'serverspec':
     stage             => 'test',
     component         => 'publish',
-#    staging_directory => "${tmp_dir}/packer-puppet-masterless-publish",
+    staging_directory => "${tmp_dir}/packer-puppet-masterless-publish",
     tries             => 5,
     try_sleep         => 3,
   }

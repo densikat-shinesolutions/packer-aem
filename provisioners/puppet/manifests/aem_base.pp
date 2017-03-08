@@ -37,7 +37,7 @@ class aem_base (
   class { 'serverspec':
     stage             => 'test',
     component         => 'aem_base',
-#    staging_directory => "${tmp_dir}/packer-puppet-masterless-aem_base",
+    staging_directory => "${tmp_dir}/packer-puppet-masterless-aem_base",
     tries             => 5,
     try_sleep         => 3,
   }

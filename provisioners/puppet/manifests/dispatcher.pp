@@ -47,7 +47,7 @@ class dispatcher (
   class { 'serverspec':
     stage             => 'test',
     component         => 'dispatcher',
-#    staging_directory => "${tmp_dir}/packer-puppet-masterless-dispatcher",
+    staging_directory => "${tmp_dir}/packer-puppet-masterless-dispatcher",
     tries             => 15,
     try_sleep         => 3,
   }

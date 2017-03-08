@@ -11,7 +11,7 @@ class java (
   class { 'serverspec':
     stage             => 'test',
     component         => 'java',
-#    staging_directory => "${tmp_dir}/packer-puppet-masterless-java",
+    staging_directory => "${tmp_dir}/packer-puppet-masterless-java",
     tries             => 5,
     try_sleep         => 3,
   }

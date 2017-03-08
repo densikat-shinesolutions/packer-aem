@@ -72,8 +72,8 @@
       "destination": "{{user `tmp_dir`}}"
     },
     {
-	"type": "shell-local",
-	"command": "echo #################################### base starts ####################"
+    	"type": "shell-local",
+    	"command": "echo #################### base provisining starts ####################"
     },
     {
       "type": "shell",
@@ -87,17 +87,14 @@
       "type": "puppet-masterless",
       "extra_arguments": [
       ],
-      "staging_directory": "{{user `tmp_dir`}}/packer-puppet-masterless-{{user `component`}}",
+      "staging_directory": "{{user `tmp_dir`}}/packer-puppet-masterless-base",
       "manifest_file": "provisioners/puppet/manifests/base.pp",
       "hiera_config_path": "conf/hiera.yaml",
       "module_paths": [
         "modules",
         "provisioners/puppet/modules"
       ],
-      "puppet_bin_dir": "{{user `puppet_bin_dir`}}",
-      "facter": {
-        "staging_directory":  "{{user `tmp_dir`}}/packer-puppet-masterless-{{user `component`}}"
-      }
+      "puppet_bin_dir": "{{user `puppet_bin_dir`}}"
     },
     {
       "type": "shell",
@@ -116,38 +113,23 @@
       ]
     },
     {
-      "type": "shell",
-      "inline": [
-	"rm -rf {{user `tmp_dir`}}/packer-puppet-masterless-{{user `component`}}" 
-      ]
-    },
-    {
-	"type": "shell-local",
-	"command": "echo #################################### java starts ####################"
+    	"type": "shell-local",
+    	"command": "echo #################### java provisining starts ####################"
     },
     {
       "type": "puppet-masterless",
-      "staging_directory": "{{user `tmp_dir`}}/packer-puppet-masterless-{{user `component`}}",
+      "staging_directory": "{{user `tmp_dir`}}/packer-puppet-masterless-java",
       "manifest_file": "provisioners/puppet/manifests/java.pp",
       "hiera_config_path": "conf/hiera.yaml",
       "module_paths": [
         "modules",
         "provisioners/puppet/modules"
       ],
-      "puppet_bin_dir": "{{user `puppet_bin_dir`}}",
-      "facter": {
-        "staging_directory":  "{{user `tmp_dir`}}/packer-puppet-masterless-{{user `component`}}"
-      }
+      "puppet_bin_dir": "{{user `puppet_bin_dir`}}"
     },
     {
-      "type": "shell",
-      "inline": [
-	"rm -rf {{user `tmp_dir`}}/packer-puppet-masterless-{{user `component`}}" 
-      ]
-    },
-    {
-	"type": "shell-local",
-	"command": "echo #################################### author  starts ####################"
+    	"type": "shell-local",
+  	  "command": "echo #################### author provisioning starts ####################"
     },
     {
       "type": "puppet-masterless",
@@ -158,10 +140,7 @@
         "modules",
         "provisioners/puppet/modules"
       ],
-      "puppet_bin_dir": "{{user `puppet_bin_dir`}}",
-      "facter": {
-        "staging_directory":  "{{user `tmp_dir`}}/packer-puppet-masterless-aem_base"
-      }
+      "puppet_bin_dir": "{{user `puppet_bin_dir`}}"
     },
     {
       "type": "puppet-masterless",
@@ -173,10 +152,7 @@
         "modules",
         "provisioners/puppet/modules"
       ],
-      "puppet_bin_dir": "{{user `puppet_bin_dir`}}",
-      "facter": {
-        "staging_directory":  "{{user `tmp_dir`}}/packer-puppet-masterless-{{user `component`}}"
-      }
+      "puppet_bin_dir": "{{user `puppet_bin_dir`}}"
     },
     {
       "type": "shell",
