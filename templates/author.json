@@ -24,7 +24,7 @@
       "name": "author",
       "type": "amazon-ebs",
       "ssh_username": "{{user `aws_user`}}",
-      "ami_description": "Packer AEM Bootstrap - AEM Author AMI ({{user `version`}})",
+      "ami_description": "densikat - Packer AEM Bootstrap - AEM Author AMI ({{user `version`}})",
       "ami_name": "{{user `component`}}-{{user `version`}}-{{timestamp}}",
       "instance_type": "{{user `author_instance_type`}}",
       "region": "{{user `aws_region`}}",
