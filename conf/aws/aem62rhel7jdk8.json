@@ -27,6 +27,6 @@
     "publish_ami_source_ami": "ami-56303f35",
     "publish_instance_type": "m4.large",
     "publish_repository_volume_size": "50",
-    "puppet_bin_dir": "/usr/local/bin",
+    "puppet_bin_dir": "/usr/bin",
     "vm_name": "rhel-7.2-vbox"
 }
