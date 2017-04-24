@@ -6,6 +6,6 @@ version_update = @hiera.lookup('jdk_oracle::version_update', nil, @scope)
 java_version = "1.#{version}.0_#{version_update}"
 
 describe command('java -version') do
-  its(:stdout) { should include "java version \"#{java_version}\"" }
+  its(:stdout) { should include "java version #{java_version}" }
   its(:exit_status) { should eq 0 }
 end
