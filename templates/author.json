@@ -25,7 +25,7 @@
       "type": "amazon-ebs",
       "ssh_username": "{{user `aws_user`}}",
       "ami_description": "Packer AEM Bootstrap - AEM Author AMI ({{user `version`}})",
-      "ami_name": "densikat - {{user `component`}}-{{user `version`}}-{{timestamp}}",
+      "ami_name": "{{user `component`}}-{{user `version`}}-{{timestamp}}",
       "instance_type": "{{user `author_instance_type`}}",
       "region": "{{user `aws_region`}}",
       "iam_instance_profile": "{{ user `iam_instance_profile` }}",
@@ -54,7 +54,7 @@
         "Application Id": "Adobe Experience Manager (AEM)",
         "Application Role": "AEM Author AMI",
         "Version": "{{user `version`}}",
-        "Name": "Packer Builder - AEM Author AMI ({{user `version`}})",
+        "Name": "densikat - Packer Builder - AEM Author AMI ({{user `version`}})",
         "Owner": "{{user `owner`}}",
         "Cost Center": "{{user `cost_center`}}"
       },

@@ -46,7 +46,7 @@
         "Application Id": "Adobe Experience Manager (AEM)",
         "Application Role": "Java AMI",
         "Version": "{{user `version`}}",
-        "Name": "Java AMI ({{user `version`}})",
+        "Name": "densikat - Java AMI ({{user `version`}})",
         "Owner": "{{user `owner`}}",
         "Cost Center": "{{user `cost_center`}}"
       }
