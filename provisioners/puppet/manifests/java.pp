@@ -13,6 +13,7 @@ class java (
     version         => '8u121',
     type            => 'jdk',
     add_alternative => true,
+    add_system_env  => true,
   }
 
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
