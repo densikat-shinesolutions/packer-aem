@@ -42,6 +42,7 @@ $(AMIS):
 		PACKER_LOG=1 \
 		packer build \
 		-debug \
+		-on-error=abort \
 		-var-file $(var_file) \
 		-var 'var_file=$(var_file)' \
 		-var 'component=$@' \
