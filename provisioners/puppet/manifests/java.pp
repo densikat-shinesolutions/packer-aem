@@ -9,11 +9,16 @@ class java (
     require => Stage['main']
   }
 
+  each( [6,7,8] ) | $version | {
+    package { ["openjdk-${version}-jdk", "openjdk-${version}-jre"]:
+      ensure => 'purged',
+    }
+  }
+
   class { '::oracle_java':
     version         => '8u121',
     type            => 'jdk',
     add_alternative => true,
-    add_system_env  => true,
   }
 
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
@@ -24,6 +29,10 @@ class java (
 
   exec { '/sbin/ldconfig':
     refreshonly => true,
+  }
+
+  exec{ "update-java-alternatives -s java-8-oracle":
+    path    => ["/usr/bin", "/usr/sbin"],
   }
 
   archive { "${tmp_dir}/aem.cert":
