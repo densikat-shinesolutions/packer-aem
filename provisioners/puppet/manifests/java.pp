@@ -9,8 +9,6 @@ class java (
     require => Stage['main']
   }
 
-  }
-
   class { '::oracle_java':
     version         => '8u121',
     type            => 'jdk',
