@@ -31,7 +31,11 @@ class java (
     refreshonly => true,
   }
 
-  exec{ "update-java-alternatives -s java-8-oracle":
+  exec{ "alternatives --install /usr/bin/java java /usr/java/jdk1.8.0_121/bin/java 20000":
+    path    => ["/usr/bin", "/usr/sbin"],
+  }
+
+  exec{ "alternatives --config java":
     path    => ["/usr/bin", "/usr/sbin"],
   }
 
