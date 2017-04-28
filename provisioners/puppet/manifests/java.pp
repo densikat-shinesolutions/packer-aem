@@ -35,10 +35,6 @@ class java (
     path    => ["/usr/bin", "/usr/sbin"],
   }
 
-  exec{ "alternatives --config java":
-    path    => ["/usr/bin", "/usr/sbin"],
-  }
-
   archive { "${tmp_dir}/aem.cert":
     ensure => present,
     source => $aem_cert_source,
