@@ -9,16 +9,17 @@ class java (
     require => Stage['main']
   }
 
-  each( [6,7,8] ) | $version | {
-    package { ["openjdk-${version}-jdk", "openjdk-${version}-jre"]:
-      ensure => 'purged',
-    }
   }
 
   class { '::oracle_java':
     version         => '8u121',
     type            => 'jdk',
     add_alternative => true,
+  }
+
+  each( [6,7,8] ) | $version | {
+    package { ["openjdk-${version}-jdk", "openjdk-${version}-jre"]:
+      ensure => 'purged',
   }
 
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
@@ -31,21 +32,22 @@ class java (
     refreshonly => true,
   }
 
-  exec{ "alternatives --install /usr/bin/java java /usr/java/jdk1.8.0_121/bin/java 20000":
-    path    => ["/usr/bin", "/usr/sbin"],
-  }
+  #exec{ "alternatives --install /usr/bin/java java /usr/java/jdk1.8.0_121/bin/java 20000":
+  #  path    => ["/usr/bin", "/usr/sbin"],
+  #}
 
   archive { "${tmp_dir}/aem.cert":
     ensure => present,
     source => $aem_cert_source,
   }
-  #java_ks { 'Add cert to default Java truststore':
-  #  ensure      => latest,
-  #  name        => 'cqse',
-  #  certificate => "${tmp_dir}/aem.cert",
-  #  target      => '/usr/java/default/jre/lib/security/cacerts',
-  #  password    => 'changeit',
-  #}
+
+  java_ks { 'Add cert to default Java truststore':
+    ensure      => latest,
+    name        => 'cqse',
+    certificate => "${tmp_dir}/aem.cert",
+    target      => '/usr/java/default/jre/lib/security/cacerts',
+    password    => 'changeit',
+  }
 
   if $install_collectd {
 
