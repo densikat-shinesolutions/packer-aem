@@ -39,13 +39,13 @@ class java (
     ensure => present,
     source => $aem_cert_source,
   }
-  java_ks { 'Add cert to default Java truststore':
-    ensure      => latest,
-    name        => 'cqse',
-    certificate => "${tmp_dir}/aem.cert",
-    target      => '/usr/java/default/jre/lib/security/cacerts',
-    password    => 'changeit',
-  }
+  #java_ks { 'Add cert to default Java truststore':
+  #  ensure      => latest,
+  #  name        => 'cqse',
+  #  certificate => "${tmp_dir}/aem.cert",
+  #  target      => '/usr/java/default/jre/lib/security/cacerts',
+  #  password    => 'changeit',
+  #}
 
   if $install_collectd {
 
