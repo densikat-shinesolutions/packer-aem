@@ -15,13 +15,23 @@ class java (
     add_alternative => true,
   }
 
-  each( [6,7,8] ) | $version | {
-    package { ["openjdk-${version}-jdk", "openjdk-${version}-jre"]:
-      ensure => 'purged',
+
+  #each( [6,7,8] ) | $version | {
+  #  package { ["openjdk-${version}-jdk", "openjdk-${version}-jre"]:
+  #    ensure => 'purged',
+  #}
+
+  package { 'openjdk-8-jdk':
+    ensure => 'purged',
+  }
+  
+
+  package { 'openjdk-8-jre':
+    ensure => 'purged',
   }
 
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
-    ensure  => present,
+    ensure  => file,
     content => "/usr/java/latest/jre/lib/amd64/server\n",
     notify  => Exec['/sbin/ldconfig'],
   }
@@ -85,7 +95,7 @@ class java (
     }
 
     file { $collectd_jmx_types_path:
-      ensure  => present,
+      ensure  => file,
       content => file('config/collectd_jmx_types.db'),
       require => Package[$::collectd::install::package_name],
     }
