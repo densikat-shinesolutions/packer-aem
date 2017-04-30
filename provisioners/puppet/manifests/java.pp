@@ -6,7 +6,7 @@ class java (
 ) {
 
   stage { 'test':
-    require => Stage['main']
+    require => Stage['main'],
   }
 
   class { '::oracle_java':
