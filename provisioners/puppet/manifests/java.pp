@@ -50,9 +50,10 @@ class java (
     add_alternative => true,
   }
 
+  alternatives_update { 'java': versiongrep => 'jdk1.8.0_121/bin/java' }
+
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
     ensure  => file,
-    
     content => "/usr/java/latest/jre/lib/amd64/server\n",
     notify  => Exec['/sbin/ldconfig'],
   }
@@ -61,7 +62,6 @@ class java (
     refreshonly => true,
   }
 
-  alternatives_update { 'java': versiongrep => 'jdk1.8.0_121/bin/java' }
 
   archive { "${tmp_dir}/aem.cert":
     ensure => present,
