@@ -12,6 +12,9 @@ class java (
   class { '::oracle_java':
     version         => '8u131',
     type            => 'jdk',
+    build           => '-b11',
+    checksum        => '9024d13ec651d07de450d465f14065a6',
+    urlcode         => '/d54c1d3a095b4ff2b6607d096fa80163',
     add_alternative => true,
   }
 
