@@ -2,6 +2,7 @@ class java (
   $tmp_dir,
   $aem_cert_source,
   $install_collectd = true,
+  $java_path = '/usr/java/jdk1.8.0_121/bin/java',
   $collectd_cloudwatch_source_url = 'https://github.com/awslabs/collectd-cloudwatch/archive/master.tar.gz',
 ) {
 
@@ -9,13 +10,23 @@ class java (
     require => Stage['main'],
   }
 
+#  class { '::oracle_java':
+#    version         => '8u131',
+#    type            => 'jdk',
+#    build           => '-b11',
+#    checksum        => '9024d13ec651d07de450d465f14065a6',
+#    urlcode         => '/d54c1d3a095b4ff2b6607d096fa80163',
+#    add_alternative => true,
+#  }
+
   class { '::oracle_java':
-    version         => '8u131',
+    version         => '8u121',
     type            => 'jdk',
-    build           => '-b11',
-    checksum        => '9024d13ec651d07de450d465f14065a6',
-    urlcode         => '/d54c1d3a095b4ff2b6607d096fa80163',
     add_alternative => true,
+  }
+
+  alternatives { 'java':
+    path => $java_path,
   }
 
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
