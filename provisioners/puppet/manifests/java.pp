@@ -25,9 +25,6 @@ class java (
     add_alternative => true,
   }
 
-  alternatives { 'java':
-    path => $java_path,
-  }
 
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
     ensure  => file,
@@ -50,6 +47,10 @@ class java (
     certificate => "${tmp_dir}/aem.cert",
     target      => '/usr/java/default/jre/lib/security/cacerts',
     password    => 'changeit',
+  }
+
+  alternatives { 'java':
+    path => $java_path,
   }
 
   if $install_collectd {
