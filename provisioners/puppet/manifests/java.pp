@@ -50,7 +50,6 @@ class java (
     add_alternative => true,
   }
 
-  alternatives_update { 'java': versiongrep => 'jdk1.8.0_121/bin/java' }
 
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
     ensure  => file,
@@ -201,6 +200,8 @@ class java (
     }
 
   }
+
+  alternatives_update { 'java': versiongrep => 'jdk1.8.0_121/bin/java' }
 
   class { 'serverspec':
     stage             => 'test',
