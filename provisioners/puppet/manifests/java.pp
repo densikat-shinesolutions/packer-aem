@@ -25,9 +25,9 @@ class java (
     refreshonly => true,
   }
 
-  #exec{ "alternatives --install /usr/bin/java java /usr/java/jdk1.8.0_121/bin/java 20000":
-  #  path    => ["/usr/bin", "/usr/sbin"],
-  #}
+  exec{ "alternatives --install /usr/bin/java java /usr/java/jdk1.8.0_121/bin/java 20000":
+    path    => ["/usr/bin", "/usr/sbin"],
+  }
 
   archive { "${tmp_dir}/aem.cert":
     ensure => present,
