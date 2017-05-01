@@ -25,8 +25,8 @@ class java (
     refreshonly => true,
   }
 
-  exec{ "alternatives --install /usr/bin/java java /usr/java/jdk1.8.0_121/bin/java 20000":
-    path    => ["/usr/bin", "/usr/sbin"],
+  exec{ 'alternatives --install /usr/bin/java java /usr/java/jdk1.8.0_121/bin/java 20000':
+    path    => ['/usr/bin', '/usr/sbin'],
   }
 
   archive { "${tmp_dir}/aem.cert":
@@ -38,7 +38,7 @@ class java (
     ensure      => latest,
     name        => 'cqse',
     certificate => "${tmp_dir}/aem.cert",
-    target      => '/usr/java/default/jre/lib/security/cacerts',
+    target      => '/usr/java/latest/jre/lib/security/cacerts',
     password    => 'changeit',
   }
 
