@@ -36,6 +36,10 @@ class java (
     refreshonly => true,
   }
 
+  alternatives { 'java':
+    path => $java_path,
+  }
+
   archive { "${tmp_dir}/aem.cert":
     ensure => present,
     source => $aem_cert_source,
@@ -49,9 +53,6 @@ class java (
     password    => 'changeit',
   }
 
-  alternatives { 'java':
-    path => $java_path,
-  }
 
   if $install_collectd {
 
