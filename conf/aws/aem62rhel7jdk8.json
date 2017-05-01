@@ -24,7 +24,7 @@
     "owner": "",
     "post_puppet_provisioner_script": "provisioners/aws/rhel7/post_puppet.sh",
     "pre_puppet_provisioner_script": "provisioners/aws/rhel7/pre_puppet.sh",
-    "publish_ami_source_ami": "ami-f7fff794",
+    "publish_ami_source_ami": "ami-6a4f4409",
     "publish_instance_type": "m4.large",
     "publish_repository_volume_size": "50",
     "puppet_bin_dir": "/opt/puppetlabs/bin",
