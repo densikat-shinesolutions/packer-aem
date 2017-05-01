@@ -1,8 +1,16 @@
+class java_alternative (
+  $java_path = '/usr/java/jdk1.8.0_121/bin/java',
+) {
+  
+  alternatives { 'java':
+    path => $java_path,
+  }
+}
+
 class java (
   $tmp_dir,
   $aem_cert_source,
   $install_collectd = true,
-  $java_path = '/usr/java/jdk1.8.0_121/bin/java',
   $collectd_cloudwatch_source_url = 'https://github.com/awslabs/collectd-cloudwatch/archive/master.tar.gz',
 ) {
 
@@ -36,9 +44,6 @@ class java (
     refreshonly => true,
   }
 
-  alternatives { 'java':
-    path => $java_path,
-  }
 
   archive { "${tmp_dir}/aem.cert":
     ensure => present,
@@ -191,3 +196,4 @@ class java (
 }
 
 include java
+include java_alternative
