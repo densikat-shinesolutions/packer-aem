@@ -15,11 +15,6 @@ class java (
     add_alternative => true,
   }
 
-  package { ['openjdk-6-jre', 'openjdk-6-jre-headless', 'openjdk-7-jre', 'openjdk-7-jre-headless', 'openjdk-8-jre', 'openjdk-8-jre-headless']:
-    provider  => 'yum',
-    ensure    => purged,
-  }
-
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
     ensure  => file,
     content => "/usr/java/default/jre/lib/amd64/server\n",
@@ -28,6 +23,10 @@ class java (
 
   exec { '/sbin/ldconfig':
     refreshonly => true,
+  }
+
+  package { ['openjdk-6-jre', 'openjdk-6-jre-headless', 'openjdk-7-jre', 'openjdk-7-jre-headless', 'openjdk-8-jre', 'openjdk-8-jre-headless']:
+    ensure    => purged,
   }
 
   archive { "${tmp_dir}/aem.cert":
