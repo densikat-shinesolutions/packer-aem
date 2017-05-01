@@ -1,3 +1,38 @@
+  # Manipulates alternatives using update-alternatives.
+  # Supports RHEL, Centos and Suse.
+  # Ubuntu not tested (yet).
+  #
+  # There is rudimentary alternatives support in the java class,
+  # but it's rather limited and doesn't support most platforms and java versions.
+  define alternatives_update (
+    $item = $title,   # the item to manage, ie "java"
+    $versiongrep,     # string to pass to grep to select an alternative, ie '1.8'
+    $optional = true,  # if false, execution will fail if the version is not found
+    $altcmd   = 'update-alternatives' # command to use
+  ) {
+
+    if ! $optional {
+      # verify that we have exactly 1 matching alternatives, unless it's optional
+      exec { "check alternatives for ${item}":
+        path    => ['/sbin','/bin','/usr/bin','/usr/sbin'],
+        command => "echo Alternative for ${item} version containing ${versiongrep} was not found, or multiple found ; false",
+        unless  => "test $(${altcmd} --display ${item} | grep '^/' | grep -w -- $versiongrep | wc -l) -eq 1",
+        before  => Exec["update alternatives for ${item} to ${versiongrep}"],
+      }
+    }
+
+    # Runs the update alternatives command
+    #  - unless it reports that it's already set to that version
+    #  - unless that version is not found via grep
+    exec { "update alternatives for ${item} to ${versiongrep}":
+      path    => ['/sbin','/bin','/usr/bin','/usr/sbin'],
+      command => "${altcmd} --set ${item} $( ${altcmd} --display ${item} | grep '^/' | grep -w -- $versiongrep | sed 's/ .*$//' ) ",
+      unless  => "${altcmd} --display ${item} | grep 'currently points' | grep -w -- $versiongrep ",
+      onlyif  => "${altcmd} --display ${item} | grep '^/' | grep -w -- $versiongrep", # check that there is one (if optional and not found, this won't run)
+    }
+
+  }
+
 class java (
   $tmp_dir,
   $aem_cert_source,
@@ -17,6 +52,7 @@ class java (
 
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
     ensure  => file,
+    
     content => "/usr/java/latest/jre/lib/amd64/server\n",
     notify  => Exec['/sbin/ldconfig'],
   }
@@ -24,6 +60,8 @@ class java (
   exec { '/sbin/ldconfig':
     refreshonly => true,
   }
+
+  alternatives_update { 'java': versiongrep => 'jdk1.8.0_121/bin/java' }
 
   archive { "${tmp_dir}/aem.cert":
     ensure => present,
