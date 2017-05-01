@@ -12,12 +12,12 @@ class java (
   class { '::oracle_java':
     version         => '8u121',
     type            => 'jdk',
-    #add_alternative => true,
+    add_alternative => true,
   }
 
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
     ensure  => file,
-    content => "/usr/java/latest/jre/lib/amd64/server\n",
+    content => "/usr/java/default/jre/lib/amd64/server\n",
     notify  => Exec['/sbin/ldconfig'],
   }
 
