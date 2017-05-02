@@ -1,16 +1,10 @@
-class java_alternative (
-  $java_path = '/usr/java/jdk1.8.0_121/bin/java',
-) {
-  
-  alternatives { 'java':
-    path => $java_path,
-  }
-}
-
 class java (
   $tmp_dir,
   $aem_cert_source,
+  $version,
+  $version_update,
   $install_collectd = true,
+  $java_path = '/usr/java/jdk1.8.0_121/bin/java',
   $collectd_cloudwatch_source_url = 'https://github.com/awslabs/collectd-cloudwatch/archive/master.tar.gz',
 ) {
 
@@ -33,7 +27,6 @@ class java (
     add_alternative => true,
   }
 
-
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
     ensure  => file,
     content => "/usr/java/latest/jre/lib/amd64/server\n",
@@ -43,7 +36,10 @@ class java (
   exec { '/sbin/ldconfig':
     refreshonly => true,
   }
-
+  
+  exec { 'alternatives --set java /usr/java/jdk1.${version}.0_${version_update}/bin/java':
+    refreshonly => true,
+  } 
 
   archive { "${tmp_dir}/aem.cert":
     ensure => present,
@@ -196,4 +192,3 @@ class java (
 }
 
 include java
-include java_alternative
