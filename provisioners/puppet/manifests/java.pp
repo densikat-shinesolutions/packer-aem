@@ -25,7 +25,9 @@ class java (
     version         => '8u121',
     type            => 'jdk',
     add_alternative => true,
-  }
+  } -> exec { "alternatives --set java /usr/java/jdk1.${jdkversion}.0_${jdkversion_update}/bin/java":
+    refreshonly => true,
+  } 
 
   file { '/etc/ld.so.conf.d/99-libjvm.conf':
     ensure  => file,
@@ -37,9 +39,6 @@ class java (
     refreshonly => true,
   }
   
-  exec { "alternatives --set java /usr/java/jdk1.${jdkversion}.0_${jdkversion_update}/bin/java":
-    refreshonly => true,
-  } 
 
   archive { "${tmp_dir}/aem.cert":
     ensure => present,
