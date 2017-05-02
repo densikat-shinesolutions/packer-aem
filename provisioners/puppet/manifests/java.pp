@@ -35,7 +35,7 @@ class java (
     refreshonly => true,
   }
   
-  exec { "alternatives --set java /usr/java/jdk1.${jdk_oracle::version}.0_${jdk_oracle::version_update}/bin/java":
+  exec { "alternatives --set java /usr/java/jdk1.${java::jdk_oracle::version}.0_${java::jdk_oracle::version_update}/bin/java":
     refreshonly => true,
   } 
 
