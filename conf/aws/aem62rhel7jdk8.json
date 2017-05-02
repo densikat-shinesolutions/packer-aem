@@ -1,6 +1,6 @@
 {
     "ami_users": "",
-    "author_ami_source_ami": "ami-56303f35",
+    "author_ami_source_ami": "ami-45545f26", 
     "author_instance_type": "m4.large",
     "author_repository_volume_size": "50",
     "aws_region": "ap-southeast-2",
