@@ -1,8 +1,6 @@
 class java (
   $tmp_dir,
   $aem_cert_source,
-  $version,
-  $version_update,
   $install_collectd = true,
   $java_path = '/usr/java/jdk1.8.0_121/bin/java',
   $collectd_cloudwatch_source_url = 'https://github.com/awslabs/collectd-cloudwatch/archive/master.tar.gz',
@@ -37,7 +35,7 @@ class java (
     refreshonly => true,
   }
   
-  exec { 'alternatives --set java /usr/java/jdk1.${version}.0_${version_update}/bin/java':
+  exec { 'alternatives --set java /usr/java/jdk1.${jdk_oracle::version}.0_${jdk_oracle::version_update}/bin/java':
     refreshonly => true,
   } 
 
@@ -192,3 +190,4 @@ class java (
 }
 
 include java
+include jdk_oracle
