@@ -1,0 +1,125 @@
+//TODO: Work In Progress - Jenkinsfile for building the amis.
+
+node {
+    currentBuild.displayName = "#${env.BUILD_NUMBER}: ${Component}-${ImageConfiguration} "
+}
+
+stage ('Checkout') {
+    
+    node {
+        echo "Initialization of ${ImageConfiguration} ${Component} Started"
+        
+        //TODO: specify a release version instead of master including the downloaded puppet modules. (then should not need the make deps)
+        dir('packer-aem'){
+            git url: 'https://github.com/densikat-shinesolutions/packer-aem.git', branch: 'master'
+        }
+
+        echo 'Initialization Complete'
+    }
+    
+}
+
+stage ('Configuration') {
+    
+    node {
+        echo "Configuration of ${ImageConfiguration} ${Component} Started"
+
+        echo "PATH=${env.PATH}"
+        env.PATH = "/usr/local/bin:${env.PATH}"
+        echo "PATH=${env.PATH}"
+
+        echo 'Configuration Complete'
+    }
+    
+}
+
+//TODO: Should not need this stage. dependencies should be included in the packer-aem release zip.
+
+stage ('Dependencies') {
+    
+    node {
+        echo "Dependencies of ${ImageConfiguration} ${Component} Started"
+
+        sh 'cd packer-aem/ && make clean deps'
+        sh 'cd ../'
+
+        echo 'Dependencies Complete'
+    }
+}
+
+stage ('Build') {
+    
+    node {
+        echo "Build of ${ImageConfiguration} ${Component} Started"
+
+        if ("${Component}" == "publish" || "${Component}" == "author") {
+
+            retry(5){
+                sh "cd packer-aem/ && make ${Component} version=${env.BUILD_NUMBER} var_file=../packer-aem/conf/${ImageConfiguration}.json ami_users=${AmiUsers}"
+            }
+
+        } else {
+
+            sh "cd packer-aem/ && make ${Component} version=${env.BUILD_NUMBER} var_file=../packer-aem/conf/${ImageConfiguration}.json ami_users=${AmiUsers}"
+
+        }
+
+        echo 'Build Complete'
+    }
+    
+}
+
+stage ('Commit') {
+    
+    node {
+        echo "Commit of ${ImageConfiguration} ${Component} Started"
+
+        if ("${Component}" == "base" || "${Component}" == "java" || "${Component}" == "httpd" ) {
+
+            dir('packer-aem'){
+
+                def sourceList
+
+                switch ("${Component}") {
+
+                    case 'base':
+
+                        sourceList = "java and httpd"
+
+                        break
+
+                    case 'java':
+
+                        sourceList = "author and publish"
+
+                        break
+
+                    case 'httpd':
+
+                        sourceList = "dispatcher"
+
+                        break
+
+                    default:
+
+                        sourceList = "unknown"
+
+                        break
+
+                }
+
+                //TODO: need to handle concurrent pushes to the repo. git push or pull rebase or push etc....
+
+                sh 'git add .'
+                sh "git commit -m \"Update ${sourceList} Source AMI ID - ${env.BUILD_URL}\""
+                sh 'git pull --rebase origin master'
+                sh 'git push origin master'
+
+            }
+
+        }
+        
+        echo 'Commit Complete'
+    }
+
+}
