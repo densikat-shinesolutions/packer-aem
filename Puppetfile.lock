@@ -4,6 +4,7 @@ FORGE
     aco-oracle_java (2.8.0)
       puppet-archive (< 2.0.0, >= 0.4.4)
       puppetlabs-stdlib (< 5.0.0, >= 3.2.0)
+    adrien-alternatives (0.3.0)
     bashtoni-timezone (1.0.0)
     bstopp-aem (2.4.1)
       puppetlabs-ruby (< 1.0.0, >= 0.6.0)
@@ -50,6 +51,7 @@ GIT
 
 DEPENDENCIES
   aco-oracle_java (= 2.8.0)
+  adrien-alternatives (= 0.3.0)
   bashtoni-timezone (>= 0)
   bstopp-aem (>= 0)
   jfryman-selinux (>= 0)

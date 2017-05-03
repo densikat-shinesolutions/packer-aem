@@ -11,7 +11,7 @@ stage ('Checkout') {
         
         //TODO: specify a release version instead of master including the downloaded puppet modules. (then should not need the make deps)
         dir('packer-aem'){
-            git url: 'https://github.com/densikat-shinesolutions/packer-aem.git', branch: 'master'
+            git credentialsId: '${credentialid}', url: 'https://github.com/densikat-shinesolutions/packer-aem.git', branch: 'master'
         }
 
         echo 'Initialization Complete'
@@ -52,15 +52,19 @@ stage ('Build') {
     node {
         echo "Build of ${ImageConfiguration} ${Component} Started"
 
+        sh "jq \'.base_ami_source_ami = \"$BaseAMIid\"\' ./packer-aem/conf/aws/${ImageConfiguration}.json > tmp.json"
+        sh "cat tmp.json > ./packer-aem/conf/aws/${ImageConfiguration}.json"
+        sh "rm tmp.json"
+
         if ("${Component}" == "publish" || "${Component}" == "author") {
 
             retry(5){
-                sh "cd packer-aem/ && make ${Component} version=${env.BUILD_NUMBER} var_file=../packer-aem/conf/${ImageConfiguration}.json ami_users=${AmiUsers}"
+                sh "cd packer-aem/ && make ${Component} version=${env.BUILD_NUMBER} var_file=./conf/aws/${ImageConfiguration}.json"
             }
 
         } else {
 
-            sh "cd packer-aem/ && make ${Component} version=${env.BUILD_NUMBER} var_file=../packer-aem/conf/${ImageConfiguration}.json ami_users=${AmiUsers}"
+            sh "cd packer-aem/ && make ${Component} version=${env.BUILD_NUMBER} var_file=./conf/aws/${ImageConfiguration}.json"
 
         }
 
@@ -110,10 +114,19 @@ stage ('Commit') {
 
                 //TODO: need to handle concurrent pushes to the repo. git push or pull rebase or push etc....
 
-                sh 'git add .'
-                sh "git commit -m \"Update ${sourceList} Source AMI ID - ${env.BUILD_URL}\""
-                sh 'git pull --rebase origin master'
-                sh 'git push origin master'
+                try {
+                  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '${credentialid}', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
+                      sh("git config credential.username ${env.GIT_USERNAME}")
+                      sh("git config credential.helper '!echo password=\$GIT_PASSWORD; echo'")
+                      sh("git add .")
+                      sh("git commit -m \"Update ${sourceList} Source AMI ID - ${env.BUILD_URL}\"")
+                      sh("git pull --rebase origin master")
+                      sh("GIT_ASKPASS=true git push origin master")
+                  }
+                } finally {
+                      sh("git config --unset credential.username")
+                      sh("git config --unset credential.helper")
+                }
 
             }
 
