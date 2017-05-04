@@ -12,7 +12,7 @@
     "base_instance_type": "t2.micro",
     "base_provisioner_script": "provisioners/aws/rhel7/base.sh",
     "cost_center": "",
-    "dispatcher_ami_source_ami": "ami-75bdbe16",
+    "dispatcher_ami_source_ami": "ami-e73b3084",
     "dispatcher_instance_type": "t2.micro",
     "httpd_ami_source_ami": "ami-5b272c38",
     "httpd_instance_type": "t2.micro",
