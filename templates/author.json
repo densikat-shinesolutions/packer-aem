@@ -54,7 +54,7 @@
         "Application Id": "Adobe Experience Manager (AEM)",
         "Application Role": "AEM Author AMI",
         "Version": "{{user `version`}}",
-        "Name": "densikat - Packer Builder - AEM Author AMI ({{user `version`}})",
+        "Name": "Packer Builder - AEM Author AMI ({{user `version`}})",
         "Owner": "{{user `owner`}}",
         "Cost Center": "{{user `cost_center`}}"
       },
