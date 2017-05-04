@@ -57,8 +57,7 @@ stage ('Dependencies') {
     node {
         echo "Dependencies of ${ImageConfiguration} ${Component} Started"
 
-        sh 'cd packer-aem/ && make clean deps'
-        sh 'cd ../'
+        sh 'make clean deps'
 
         echo 'Dependencies Complete'
     }
@@ -71,20 +70,20 @@ stage ('Build') {
 
         // If base image then update with AMI base id from Jenkins parameter
         if ("${Component}" == "base") {
-            sh "jq \'.base_ami_source_ami = \"$BaseAMIid\"\' ./packer-aem/conf/aws/${ImageConfiguration}.json > tmp.json"
-            sh "cat tmp.json > ./packer-aem/conf/aws/${ImageConfiguration}.json"
+            sh "jq \'.base_ami_source_ami = \"$BaseAMIid\"\' ./conf/aws/${ImageConfiguration}.json > tmp.json"
+            sh "cat tmp.json > ./conf/aws/${ImageConfiguration}.json"
             sh "rm tmp.json"
         }
 
         if ("${Component}" == "publish" || "${Component}" == "author") {
 
             retry(5){
-                sh "cd packer-aem/ && make ${Component} version=${env.BUILD_NUMBER} var_file=./conf/aws/${ImageConfiguration}.json"
+                sh "make ${Component} version=${env.BUILD_NUMBER} var_file=./conf/aws/${ImageConfiguration}.json"
             }
 
         } else {
 
-            sh "cd packer-aem/ && make ${Component} version=${env.BUILD_NUMBER} var_file=./conf/aws/${ImageConfiguration}.json"
+            sh "make ${Component} version=${env.BUILD_NUMBER} var_file=./conf/aws/${ImageConfiguration}.json"
 
         }
 
@@ -100,7 +99,7 @@ stage ('Commit') {
 
         if ("${Component}" == "base" || "${Component}" == "java" || "${Component}" == "httpd" ) {
 
-            dir('packer-aem'){
+            dir('.'){
 
                 def sourceList
 
