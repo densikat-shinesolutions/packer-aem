@@ -2,7 +2,7 @@
 
 node {
     currentBuild.displayName = "#${env.BUILD_NUMBER}: ${Component}-${ImageConfiguration} "
-}
+
 
 stage ('Checkout') {
     
@@ -155,5 +155,7 @@ stage ('Commit') {
         
         echo 'Commit Complete'
     }
+
+}
 
 }
