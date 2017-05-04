@@ -11,7 +11,7 @@ stage ('Checkout') {
         
         //TODO: specify a release version instead of master including the downloaded puppet modules. (then should not need the make deps)
         dir('packer-aem'){
-            git credentialsId: '${credentialid}', url: 'https://github.com/densikat-shinesolutions/packer-aem.git', branch: 'master'
+            git credentialsId: "${credentialid}", url: 'https://github.com/densikat-shinesolutions/packer-aem.git', branch: 'master'
         }
 
         echo 'Initialization Complete'
@@ -52,9 +52,12 @@ stage ('Build') {
     node {
         echo "Build of ${ImageConfiguration} ${Component} Started"
 
-        sh "jq \'.base_ami_source_ami = \"$BaseAMIid\"\' ./packer-aem/conf/aws/${ImageConfiguration}.json > tmp.json"
-        sh "cat tmp.json > ./packer-aem/conf/aws/${ImageConfiguration}.json"
-        sh "rm tmp.json"
+        // If base image then update with AMI base id from Jenkins parameter
+        if ("${Component}" == "base") {
+            sh "jq \'.base_ami_source_ami = \"$BaseAMIid\"\' ./packer-aem/conf/aws/${ImageConfiguration}.json > tmp.json"
+            sh "cat tmp.json > ./packer-aem/conf/aws/${ImageConfiguration}.json"
+            sh "rm tmp.json"
+        }
 
         if ("${Component}" == "publish" || "${Component}" == "author") {
 
@@ -115,7 +118,7 @@ stage ('Commit') {
                 //TODO: need to handle concurrent pushes to the repo. git push or pull rebase or push etc....
 
                 try {
-                  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: '${credentialid}', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
+                  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "${credentialid}", usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
                       sh("git config credential.username ${env.GIT_USERNAME}")
                       sh("git config credential.helper '!echo password=\$GIT_PASSWORD; echo'")
                       sh("git add .")
