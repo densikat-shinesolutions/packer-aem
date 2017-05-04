@@ -25,16 +25,16 @@ stage ('Checkout') {
     
 }
 
-stage ('Tagging') {
-
-        echo "Tagging of ${Component}-${ImageConfiguration}-${env.BUILD_NUMBER} Started"
-
-        // Add tag to repository for mapping ami and build back to source code.
-        sh "git tag -a ${Component}-${ImageConfiguration}-${env.BUILD_NUMBER} -m \"Used to build ${Component}-${ImageConfiguration}-${env.BUILD_NUMBER}\""
-
-        echo 'Tagging Complete'
-
-    }
+//stage ('Tagging') {
+//
+//        echo "Tagging of ${Component}-${ImageConfiguration}-${env.BUILD_NUMBER} Started"
+//
+//        // Add tag to repository for mapping ami and build back to source code.
+//        sh "git tag -a ${Component}-${ImageConfiguration}-${env.BUILD_NUMBER} -m \"Used to build ${Component}-${ImageConfiguration}-${env.BUILD_NUMBER}\""
+//
+//        echo 'Tagging Complete'
+//
+//    }
 
 stage ('Configuration') {
     
