@@ -46,7 +46,7 @@
         "Application Id": "Adobe Experience Manager (AEM)",
         "Application Role": "Apache HTTP Server AMI",
         "Version": "{{user `version`}}",
-        "Name": "Apache HTTP Server AMI ({{user `version`}})",
+        "Name": "AEM Apache HTTP Server AMI ({{user `version`}})",
         "Owner": "{{user `owner`}}",
         "Cost Center": "{{user `cost_center`}}"
       }

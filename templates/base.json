@@ -47,7 +47,7 @@
         "Application Id": "Adobe Experience Manager (AEM)",
         "Application Role": "Base AMI",
         "Version": "{{user `version`}}",
-        "Name": "Base AMI ({{user `version`}})",
+        "Name": "AEM Base AMI ({{user `version`}})",
         "Owner": "{{user `owner`}}",
         "Cost Center": "{{user `cost_center`}}"
       }
