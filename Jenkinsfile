@@ -31,7 +31,6 @@ stage ('Tagging') {
 
         // Add tag to repository for mapping ami and build back to source code.
         sh "git tag -a ${Component}-${ImageConfiguration}-${env.BUILD_NUMBER} -m \"Used to build ${Component}-${ImageConfiguration}-${env.BUILD_NUMBER}\""
-        sh 'git push --tags'
 
         echo 'Tagging Complete'
 
